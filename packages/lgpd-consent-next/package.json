@@ -1,6 +1,6 @@
 {
   "name": "@te-digital-tech/lgpd-consent-next",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Next.js App Router adapter for @te-digital-tech/lgpd-consent. Server-side consent reading.",
   "keywords": [
     "lgpd",
@@ -44,7 +44,11 @@
       "require": "./dist/server.cjs"
     }
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",

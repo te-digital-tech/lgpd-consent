@@ -1,6 +1,6 @@
 {
   "name": "@te-digital-tech/lgpd-consent",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Headless cookie consent core for LGPD compliance. Framework-agnostic.",
   "keywords": [
     "lgpd",
@@ -68,7 +68,11 @@
       "require": "./dist/integrations/gtm.cjs"
     }
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
