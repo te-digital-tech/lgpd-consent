@@ -1,7 +1,7 @@
 'use client';
 
-import { createConsentManager } from '@te-digital/lgpd-consent';
-import type { ConsentConfig, ConsentManager } from '@te-digital/lgpd-consent';
+import { createConsentManager } from '@te-digital-tech/lgpd-consent';
+import type { ConsentConfig, ConsentManager } from '@te-digital-tech/lgpd-consent';
 import { type ReactNode, useMemo } from 'react';
 import { ConsentContext } from './ConsentContext.js';
 

@@ -1,12 +1,12 @@
 <div align="center">
 
-# `@te-digital/lgpd-consent`
+# `@te-digital-tech/lgpd-consent`
 
 **Headless cookie consent for React & Next.js — LGPD-first.**
 
 [English](./README.md) · [Português](./README.pt-BR.md)
 
-[![npm version](https://img.shields.io/npm/v/@te-digital/lgpd-consent?style=flat-square&labelColor=0A0A0A&color=00FF88)](https://www.npmjs.com/package/@te-digital/lgpd-consent)
+[![npm version](https://img.shields.io/npm/v/@te-digital-tech/lgpd-consent?style=flat-square&labelColor=0A0A0A&color=00FF88)](https://www.npmjs.com/package/@te-digital-tech/lgpd-consent)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00FF88?style=flat-square&labelColor=0A0A0A)](./LICENSE)
 [![Made by T&E Digital](https://img.shields.io/badge/made%20by-T%26E%20Digital-00FF88?style=flat-square&labelColor=0A0A0A)](https://tedigital.com.br)
 
@@ -42,21 +42,21 @@ A modern, framework-agnostic cookie consent management library purpose-built for
 
 | Package | Description |
 |---------|-------------|
-| [`@te-digital/lgpd-consent`](./packages/lgpd-consent) | Framework-agnostic core. Use in plain JS, Vue, Svelte, anywhere. |
-| [`@te-digital/lgpd-consent-react`](./packages/lgpd-consent-react) | React adapter: `ConsentProvider`, `useConsent`, `useCategory` |
-| [`@te-digital/lgpd-consent-next`](./packages/lgpd-consent-next) | Next.js App Router adapter with server-side helpers |
+| [`@te-digital-tech/lgpd-consent`](./packages/lgpd-consent) | Framework-agnostic core. Use in plain JS, Vue, Svelte, anywhere. |
+| [`@te-digital-tech/lgpd-consent-react`](./packages/lgpd-consent-react) | React adapter: `ConsentProvider`, `useConsent`, `useCategory` |
+| [`@te-digital-tech/lgpd-consent-next`](./packages/lgpd-consent-next) | Next.js App Router adapter with server-side helpers |
 
 ## Quick start (Next.js)
 
 ```bash
-pnpm add @te-digital/lgpd-consent @te-digital/lgpd-consent-react @te-digital/lgpd-consent-next
+pnpm add @te-digital-tech/lgpd-consent @te-digital-tech/lgpd-consent-react @te-digital-tech/lgpd-consent-next
 ```
 
 ```tsx
 // app/providers.tsx
 'use client';
-import { ConsentProvider } from '@te-digital/lgpd-consent-react';
-import { ptBR } from '@te-digital/lgpd-consent/i18n';
+import { ConsentProvider } from '@te-digital-tech/lgpd-consent-react';
+import { ptBR } from '@te-digital-tech/lgpd-consent/i18n';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -83,7 +83,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 ```tsx
 // app/components/CookieBanner.tsx
 'use client';
-import { useConsent } from '@te-digital/lgpd-consent-react';
+import { useConsent } from '@te-digital-tech/lgpd-consent-react';
 
 export function CookieBanner() {
   const { state, accept, reject, openPreferences } = useConsent();
@@ -102,7 +102,7 @@ export function CookieBanner() {
 
 ```tsx
 // app/layout.tsx — server-side consent reading
-import { readConsent } from '@te-digital/lgpd-consent-next/server';
+import { readConsent } from '@te-digital-tech/lgpd-consent-next/server';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const consent = await readConsent();

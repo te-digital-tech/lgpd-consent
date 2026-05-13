@@ -1,7 +1,7 @@
 {
-  "name": "@te-digital/lgpd-consent-next",
+  "name": "@te-digital-tech/lgpd-consent-next",
   "version": "0.0.0",
-  "description": "Next.js App Router adapter for @te-digital/lgpd-consent. Server-side consent reading.",
+  "description": "Next.js App Router adapter for @te-digital-tech/lgpd-consent. Server-side consent reading.",
   "keywords": [
     "lgpd",
     "lgpd-consent",
@@ -61,7 +61,7 @@
     "provenance": true
   },
   "dependencies": {
-    "@te-digital/lgpd-consent": "workspace:*"
+    "@te-digital-tech/lgpd-consent": "workspace:*"
   },
   "peerDependencies": {
     "next": "^14.0.0 || ^15.0.0 || ^16.0.0",

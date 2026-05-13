@@ -1,4 +1,4 @@
-# `@te-digital/lgpd-consent`
+# `@te-digital-tech/lgpd-consent`
 
 Framework-agnostic core of the LGPD cookie consent manager.
 
@@ -7,14 +7,14 @@ Framework-agnostic core of the LGPD cookie consent manager.
 ## Install
 
 ```bash
-pnpm add @te-digital/lgpd-consent
+pnpm add @te-digital-tech/lgpd-consent
 ```
 
 ## Usage
 
 ```ts
-import { createConsentManager } from '@te-digital/lgpd-consent';
-import { ptBR } from '@te-digital/lgpd-consent/i18n';
+import { createConsentManager } from '@te-digital-tech/lgpd-consent';
+import { ptBR } from '@te-digital-tech/lgpd-consent/i18n';
 
 const consent = createConsentManager({
   categories: ['essential', 'analytics', 'marketing'],
@@ -66,7 +66,7 @@ manager.strings: ConsentStrings
 ## Integrations
 
 ```ts
-import { gcmDefault } from '@te-digital/lgpd-consent/integrations/gcm';
+import { gcmDefault } from '@te-digital-tech/lgpd-consent/integrations/gcm';
 
 // Call once on app boot, BEFORE any tracker loads
 gcmDefault('BR');
@@ -74,15 +74,15 @@ gcmDefault('BR');
 
 | Module | Export | Purpose |
 |--------|--------|---------|
-| `@te-digital/lgpd-consent/integrations/gcm` | `gcmDefault`, `applyGcm` | Google Consent Mode v2 |
-| `@te-digital/lgpd-consent/integrations/clarity` | `applyClarity` | Microsoft Clarity |
-| `@te-digital/lgpd-consent/integrations/meta` | `applyMeta` | Meta Pixel |
-| `@te-digital/lgpd-consent/integrations/gtm` | `applyGtm` | GTM dataLayer push |
+| `@te-digital-tech/lgpd-consent/integrations/gcm` | `gcmDefault`, `applyGcm` | Google Consent Mode v2 |
+| `@te-digital-tech/lgpd-consent/integrations/clarity` | `applyClarity` | Microsoft Clarity |
+| `@te-digital-tech/lgpd-consent/integrations/meta` | `applyMeta` | Meta Pixel |
+| `@te-digital-tech/lgpd-consent/integrations/gtm` | `applyGtm` | GTM dataLayer push |
 
 ## i18n
 
 ```ts
-import { en, ptBR } from '@te-digital/lgpd-consent/i18n';
+import { en, ptBR } from '@te-digital-tech/lgpd-consent/i18n';
 ```
 
 To add a locale, copy `src/i18n/en.ts`, translate, and submit a PR.

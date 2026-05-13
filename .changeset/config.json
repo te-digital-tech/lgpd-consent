@@ -3,7 +3,7 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
-  "linked": [["@te-digital/lgpd-consent", "@te-digital/lgpd-consent-react", "@te-digital/lgpd-consent-next"]],
+  "linked": [["@te-digital-tech/lgpd-consent", "@te-digital-tech/lgpd-consent-react", "@te-digital-tech/lgpd-consent-next"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

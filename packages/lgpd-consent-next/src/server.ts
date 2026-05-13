@@ -1,4 +1,4 @@
-import type { ConsentPreferences } from '@te-digital/lgpd-consent';
+import type { ConsentPreferences } from '@te-digital-tech/lgpd-consent';
 import { cookies } from 'next/headers';
 
 const DEFAULT_KEY = 'lgpd-consent';
@@ -24,7 +24,7 @@ export type ServerConsent = {
  * with cookies as the active strategy). localStorage cannot be read on the server.
  *
  * @example
- * import { readConsent } from '@te-digital/lgpd-consent-next/server';
+ * import { readConsent } from '@te-digital-tech/lgpd-consent-next/server';
  *
  * export default async function Layout({ children }) {
  *   const consent = await readConsent();

@@ -1,6 +1,6 @@
 'use client';
 
-import type { ConsentStrings } from '@te-digital/lgpd-consent';
+import type { ConsentStrings } from '@te-digital-tech/lgpd-consent';
 import { useContext } from 'react';
 import { ConsentContext } from './ConsentContext.js';
 

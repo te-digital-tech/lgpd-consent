@@ -1,5 +1,5 @@
 {
-  "name": "@te-digital/lgpd-consent",
+  "name": "@te-digital-tech/lgpd-consent",
   "version": "0.0.0",
   "description": "Headless cookie consent core for LGPD compliance. Framework-agnostic.",
   "keywords": [

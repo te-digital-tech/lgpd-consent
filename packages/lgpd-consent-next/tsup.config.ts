@@ -12,5 +12,5 @@ export default defineConfig({
   treeshake: true,
   target: 'es2022',
   outDir: 'dist',
-  external: ['react', 'react-dom', 'next', 'next/headers', '@te-digital/lgpd-consent'],
+  external: ['react', 'react-dom', 'next', 'next/headers', '@te-digital-tech/lgpd-consent'],
 });
