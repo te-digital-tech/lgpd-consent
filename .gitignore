@@ -15,5 +15,3 @@ Thumbs.db
 .idea
 *.log
 .turbo
-.changeset/*.md
-!.changeset/README.md
