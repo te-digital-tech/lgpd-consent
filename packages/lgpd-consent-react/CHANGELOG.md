@@ -1,4 +1,4 @@
-# @te-digital-tech/lgpd-consent-react
+# @te-digital/lgpd-consent-react
 
 ## 0.1.0
 
@@ -6,7 +6,7 @@
 
 - ca305a4: Initial public release — headless cookie consent for React and Next.js, LGPD-first.
 
-  **`@te-digital-tech/lgpd-consent`** — framework-agnostic core
+  **`@te-digital/lgpd-consent`** — framework-agnostic core
 
   - `createConsentManager` with state machine (`pending` / `granted` / `expired`)
   - localStorage + cookie storage strategies (SSR-friendly)
@@ -16,13 +16,13 @@
   - Default strings in English and Portuguese (`pt-BR`)
   - Zero runtime dependencies, dual ESM/CJS, full TypeScript
 
-  **`@te-digital-tech/lgpd-consent-react`** — React adapter
+  **`@te-digital/lgpd-consent-react`** — React adapter
 
   - `ConsentProvider`, `useConsent`, `useCategory`, `useStrings`
   - Built on `useSyncExternalStore` for safe concurrent rendering
   - React 18 and 19 supported
 
-  **`@te-digital-tech/lgpd-consent-next`** — Next.js App Router adapter
+  **`@te-digital/lgpd-consent-next`** — Next.js App Router adapter
 
   - `readConsent()` server-side reader for RSC and route handlers
   - `<ConsentScript />` boot script for Google Consent Mode v2 `default` state
@@ -31,4 +31,4 @@
 ### Patch Changes
 
 - Updated dependencies [ca305a4]
-  - @te-digital-tech/lgpd-consent@0.1.0
+  - @te-digital/lgpd-consent@0.1.0

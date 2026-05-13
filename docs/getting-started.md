@@ -9,14 +9,14 @@
 ### Install (Next.js App Router)
 
 ```bash
-pnpm add @te-digital-tech/lgpd-consent @te-digital-tech/lgpd-consent-react @te-digital-tech/lgpd-consent-next
+pnpm add @te-digital/lgpd-consent @te-digital/lgpd-consent-react @te-digital/lgpd-consent-next
 ```
 
 ### 1. Boot Google Consent Mode v2
 
 ```tsx
 // app/layout.tsx
-import { ConsentScript } from '@te-digital-tech/lgpd-consent-next';
+import { ConsentScript } from '@te-digital/lgpd-consent-next';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -35,8 +35,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ```tsx
 // app/providers.tsx
 'use client';
-import { ConsentProvider } from '@te-digital-tech/lgpd-consent-react';
-import { ptBR } from '@te-digital-tech/lgpd-consent/i18n';
+import { ConsentProvider } from '@te-digital/lgpd-consent-react';
+import { ptBR } from '@te-digital/lgpd-consent/i18n';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -66,7 +66,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 ```tsx
 'use client';
-import { useConsent, useStrings } from '@te-digital-tech/lgpd-consent-react';
+import { useConsent, useStrings } from '@te-digital/lgpd-consent-react';
 
 export function CookieBanner() {
   const { state, accept, reject, openPreferences } = useConsent();
@@ -88,7 +88,7 @@ export function CookieBanner() {
 
 ```tsx
 'use client';
-import { useCategory } from '@te-digital-tech/lgpd-consent-react';
+import { useCategory } from '@te-digital/lgpd-consent-react';
 
 export function ClarityScript() {
   const ok = useCategory('analytics');
@@ -100,7 +100,7 @@ export function ClarityScript() {
 Or server-side:
 
 ```tsx
-import { readConsent } from '@te-digital-tech/lgpd-consent-next/server';
+import { readConsent } from '@te-digital/lgpd-consent-next/server';
 
 export default async function RootLayout({ children }) {
   const consent = await readConsent();
@@ -122,14 +122,14 @@ export default async function RootLayout({ children }) {
 ### Instalação (Next.js App Router)
 
 ```bash
-pnpm add @te-digital-tech/lgpd-consent @te-digital-tech/lgpd-consent-react @te-digital-tech/lgpd-consent-next
+pnpm add @te-digital/lgpd-consent @te-digital/lgpd-consent-react @te-digital/lgpd-consent-next
 ```
 
 ### 1. Inicializar o Google Consent Mode v2
 
 ```tsx
 // app/layout.tsx
-import { ConsentScript } from '@te-digital-tech/lgpd-consent-next';
+import { ConsentScript } from '@te-digital/lgpd-consent-next';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -148,8 +148,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ```tsx
 // app/providers.tsx
 'use client';
-import { ConsentProvider } from '@te-digital-tech/lgpd-consent-react';
-import { ptBR } from '@te-digital-tech/lgpd-consent/i18n';
+import { ConsentProvider } from '@te-digital/lgpd-consent-react';
+import { ptBR } from '@te-digital/lgpd-consent/i18n';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -179,7 +179,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 ```tsx
 'use client';
-import { useConsent, useStrings } from '@te-digital-tech/lgpd-consent-react';
+import { useConsent, useStrings } from '@te-digital/lgpd-consent-react';
 
 export function CookieBanner() {
   const { state, accept, reject, openPreferences } = useConsent();
@@ -203,7 +203,7 @@ Cliente:
 
 ```tsx
 'use client';
-import { useCategory } from '@te-digital-tech/lgpd-consent-react';
+import { useCategory } from '@te-digital/lgpd-consent-react';
 
 export function ClarityScript() {
   const ok = useCategory('analytics');
@@ -215,7 +215,7 @@ export function ClarityScript() {
 Servidor:
 
 ```tsx
-import { readConsent } from '@te-digital-tech/lgpd-consent-next/server';
+import { readConsent } from '@te-digital/lgpd-consent-next/server';
 
 export default async function RootLayout({ children }) {
   const consent = await readConsent();

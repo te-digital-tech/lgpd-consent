@@ -38,7 +38,7 @@ importers:
 
   packages/lgpd-consent-next:
     dependencies:
-      '@te-digital-tech/lgpd-consent':
+      '@te-digital/lgpd-consent':
         specifier: workspace:*
         version: link:../lgpd-consent
     devDependencies:
@@ -54,7 +54,7 @@ importers:
 
   packages/lgpd-consent-react:
     dependencies:
-      '@te-digital-tech/lgpd-consent':
+      '@te-digital/lgpd-consent':
         specifier: workspace:*
         version: link:../lgpd-consent
     devDependencies:

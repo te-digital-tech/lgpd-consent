@@ -1,7 +1,7 @@
 {
-  "name": "@te-digital-tech/lgpd-consent-react",
+  "name": "@te-digital/lgpd-consent-react",
   "version": "0.1.0",
-  "description": "React adapter for @te-digital-tech/lgpd-consent. Hooks and headless components.",
+  "description": "React adapter for @te-digital/lgpd-consent. Hooks and headless components.",
   "keywords": [
     "lgpd",
     "lgpd-consent",
@@ -59,7 +59,7 @@
     "provenance": true
   },
   "dependencies": {
-    "@te-digital-tech/lgpd-consent": "workspace:*"
+    "@te-digital/lgpd-consent": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"

@@ -1,10 +1,6 @@
 'use client';
 
-import type {
-  ConsentCategory,
-  ConsentPreferences,
-  ConsentState,
-} from '@te-digital-tech/lgpd-consent';
+import type { ConsentCategory, ConsentPreferences, ConsentState } from '@te-digital/lgpd-consent';
 import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
 import { ConsentContext } from './ConsentContext.js';
 

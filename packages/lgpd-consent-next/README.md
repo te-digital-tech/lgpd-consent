@@ -1,13 +1,13 @@
-# `@te-digital-tech/lgpd-consent-next`
+# `@te-digital/lgpd-consent-next`
 
-Next.js App Router adapter for `@te-digital-tech/lgpd-consent`. Server-side consent reading + Google Consent Mode v2 boot script.
+Next.js App Router adapter for `@te-digital/lgpd-consent`. Server-side consent reading + Google Consent Mode v2 boot script.
 
 [English](../../README.md) · [Português](../../README.pt-BR.md)
 
 ## Install
 
 ```bash
-pnpm add @te-digital-tech/lgpd-consent @te-digital-tech/lgpd-consent-react @te-digital-tech/lgpd-consent-next
+pnpm add @te-digital/lgpd-consent @te-digital/lgpd-consent-react @te-digital/lgpd-consent-next
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ pnpm add @te-digital-tech/lgpd-consent @te-digital-tech/lgpd-consent-react @te-d
 
 ```tsx
 // app/layout.tsx
-import { ConsentScript } from '@te-digital-tech/lgpd-consent-next';
+import { ConsentScript } from '@te-digital/lgpd-consent-next';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -37,7 +37,7 @@ This runs BEFORE any tracker, setting all consent states to `denied`. Required f
 Useful for conditionally injecting tracker scripts only when the user has consented, avoiding the client-side flash.
 
 ```tsx
-import { readConsent } from '@te-digital-tech/lgpd-consent-next/server';
+import { readConsent } from '@te-digital/lgpd-consent-next/server';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const consent = await readConsent({ currentPolicyVersion: 1 });

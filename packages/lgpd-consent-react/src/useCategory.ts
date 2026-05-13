@@ -1,6 +1,6 @@
 'use client';
 
-import type { ConsentCategory } from '@te-digital-tech/lgpd-consent';
+import type { ConsentCategory } from '@te-digital/lgpd-consent';
 import { useConsent } from './useConsent.js';
 
 /**

@@ -1,21 +1,21 @@
-# `@te-digital-tech/lgpd-consent-react`
+# `@te-digital/lgpd-consent-react`
 
-React adapter for `@te-digital-tech/lgpd-consent`. Hooks + headless components.
+React adapter for `@te-digital/lgpd-consent`. Hooks + headless components.
 
 [English](../../README.md) · [Português](../../README.pt-BR.md)
 
 ## Install
 
 ```bash
-pnpm add @te-digital-tech/lgpd-consent @te-digital-tech/lgpd-consent-react
+pnpm add @te-digital/lgpd-consent @te-digital/lgpd-consent-react
 ```
 
 ## Usage
 
 ```tsx
 'use client';
-import { ConsentProvider, useConsent, useCategory } from '@te-digital-tech/lgpd-consent-react';
-import { ptBR } from '@te-digital-tech/lgpd-consent/i18n';
+import { ConsentProvider, useConsent, useCategory } from '@te-digital/lgpd-consent-react';
+import { ptBR } from '@te-digital/lgpd-consent/i18n';
 
 export function App({ children }: { children: React.ReactNode }) {
   return (

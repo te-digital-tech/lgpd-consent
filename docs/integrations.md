@@ -11,7 +11,7 @@
 Required for Google Ads in the EEA and the UK since March 2024. Recommended everywhere else, including Brazil.
 
 ```ts
-import { gcmDefault } from '@te-digital-tech/lgpd-consent/integrations/gcm';
+import { gcmDefault } from '@te-digital/lgpd-consent/integrations/gcm';
 
 // Boot script — call BEFORE any tracker loads
 gcmDefault('BR');
@@ -75,7 +75,7 @@ Event name: lgpd_consent_update
 Obrigatório pra Google Ads no EEE e UK desde março de 2024. Recomendado no resto do mundo, incluindo Brasil.
 
 ```ts
-import { gcmDefault } from '@te-digital-tech/lgpd-consent/integrations/gcm';
+import { gcmDefault } from '@te-digital/lgpd-consent/integrations/gcm';
 
 // Boot script — chame ANTES de qualquer tracker carregar
 gcmDefault('BR');
