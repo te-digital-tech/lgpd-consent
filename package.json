@@ -1,0 +1,44 @@
+{
+  "name": "lgpd-consent-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Headless cookie consent for React & Next.js, LGPD-first. Consentimento de cookies headless para React e Next.js, focado em LGPD.",
+  "homepage": "https://tedigital.com.br",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/te-digital-tech/lgpd-consent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/te-digital-tech/lgpd-consent/issues"
+  },
+  "author": "T&E Digital <contato@tedigital.com.br> (https://tedigital.com.br)",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.9.0",
+    "pnpm": ">=9"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter=\"./packages/*\" build",
+    "dev": "pnpm -r --parallel --filter=\"./packages/*\" dev",
+    "test": "pnpm -r --filter=\"./packages/*\" test",
+    "test:watch": "pnpm -r --parallel --filter=\"./packages/*\" test:watch",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "typecheck": "pnpm -r --filter=\"./packages/*\" typecheck",
+    "clean": "pnpm -r --filter=\"./packages/*\" clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@changesets/cli": "^2.27.11",
+    "@types/node": "^22.10.5",
+    "size-limit": "^11.1.6",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

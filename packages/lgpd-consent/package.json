@@ -1,0 +1,97 @@
+{
+  "name": "@te-digital/lgpd-consent",
+  "version": "0.0.0",
+  "description": "Headless cookie consent core for LGPD compliance. Framework-agnostic.",
+  "keywords": [
+    "lgpd",
+    "lgpd-consent",
+    "cookie-consent",
+    "cookies",
+    "consent",
+    "consent-management",
+    "anpd",
+    "brazil",
+    "brasil",
+    "privacy",
+    "privacidade",
+    "gdpr",
+    "google-consent-mode",
+    "compliance",
+    "typescript",
+    "headless"
+  ],
+  "homepage": "https://tedigital.com.br",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/te-digital-tech/lgpd-consent.git",
+    "directory": "packages/lgpd-consent"
+  },
+  "bugs": {
+    "url": "https://github.com/te-digital-tech/lgpd-consent/issues"
+  },
+  "author": "T&E Digital <contato@tedigital.com.br> (https://tedigital.com.br)",
+  "license": "MIT",
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./i18n": {
+      "types": "./dist/i18n/index.d.ts",
+      "import": "./dist/i18n/index.js",
+      "require": "./dist/i18n/index.cjs"
+    },
+    "./integrations/gcm": {
+      "types": "./dist/integrations/gcm.d.ts",
+      "import": "./dist/integrations/gcm.js",
+      "require": "./dist/integrations/gcm.cjs"
+    },
+    "./integrations/clarity": {
+      "types": "./dist/integrations/clarity.d.ts",
+      "import": "./dist/integrations/clarity.js",
+      "require": "./dist/integrations/clarity.cjs"
+    },
+    "./integrations/meta": {
+      "types": "./dist/integrations/meta.d.ts",
+      "import": "./dist/integrations/meta.js",
+      "require": "./dist/integrations/meta.cjs"
+    },
+    "./integrations/gtm": {
+      "types": "./dist/integrations/gtm.d.ts",
+      "import": "./dist/integrations/gtm.js",
+      "require": "./dist/integrations/gtm.cjs"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo *.tsbuildinfo"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "devDependencies": {
+    "happy-dom": "^15.11.7"
+  },
+  "size-limit": [
+    {
+      "name": "core (ESM)",
+      "path": "dist/index.js",
+      "limit": "3 KB"
+    }
+  ]
+}
