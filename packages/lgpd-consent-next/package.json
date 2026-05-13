@@ -1,6 +1,6 @@
 {
   "name": "@te-digital/lgpd-consent-next",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Next.js App Router adapter for @te-digital/lgpd-consent. Server-side consent reading.",
   "keywords": [
     "lgpd",

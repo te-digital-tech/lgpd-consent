@@ -1,6 +1,6 @@
 {
   "name": "@te-digital/lgpd-consent-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React adapter for @te-digital/lgpd-consent. Hooks and headless components.",
   "keywords": [
     "lgpd",
