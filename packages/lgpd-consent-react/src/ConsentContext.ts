@@ -1,5 +1,11 @@
 import type { ConsentManager } from '@te-digital/lgpd-consent';
-import { createContext } from 'react';
+import { type Dispatch, type SetStateAction, createContext } from 'react';
 
-export const ConsentContext = createContext<ConsentManager | null>(null);
+export type ConsentContextValue = {
+  manager: ConsentManager;
+  preferencesOpen: boolean;
+  setPreferencesOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export const ConsentContext = createContext<ConsentContextValue | null>(null);
 ConsentContext.displayName = 'ConsentContext';

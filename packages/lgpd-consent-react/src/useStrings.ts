@@ -9,9 +9,9 @@ import { ConsentContext } from './ConsentContext.js';
  * banners and preference modals that match the locale set in the provider.
  */
 export function useStrings(): ConsentStrings {
-  const manager = useContext(ConsentContext);
-  if (!manager) {
+  const ctx = useContext(ConsentContext);
+  if (!ctx) {
     throw new Error('[lgpd-consent-react] useStrings must be used inside <ConsentProvider>');
   }
-  return manager.strings;
+  return ctx.manager.strings;
 }

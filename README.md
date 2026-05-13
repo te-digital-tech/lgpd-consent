@@ -29,13 +29,17 @@ A modern, framework-agnostic cookie consent management library purpose-built for
 
 **This library:**
 
-- LGPD-first defaults, in Portuguese and English
-- Headless core (~2kb) — bring your own UI
-- React adapter with hooks and context
-- Next.js adapter with server-side consent reading (no script flash)
+- LGPD-first defaults, in `pt-BR`, `en`, `es`, `fr`, `de`
+- Headless core — bring your own UI (or use the React headless primitives)
+- React adapter with hooks, context, and headless `<Banner>` / `<PreferencesModal>` / `<RevokeButton>`
+- Next.js adapter with server-side consent reading (no script flash), App Router + Pages Router + middleware
 - Proof of consent: timestamp, policy version, user-agent — hook to send to your backend
 - Policy versioning: bump and force re-consent automatically
-- Built-in integrations: Google Consent Mode v2, Microsoft Clarity, Meta Pixel, GTM
+- Optional HMAC-SHA256 tamper-detection on the stored payload
+- Built-in integrations: Google Consent Mode v2, GA4, GTM, Microsoft Clarity, Meta Pixel, Hotjar, Segment, Mixpanel, TikTok Pixel, LinkedIn Insight, RD Station, HubSpot, Plausible
+- Auto-blocking script rewriter — drop `<script type="text/plain" data-consent="marketing">` and the library executes it once consent is granted
+- Cookie scanner + mass cleanup of third-party cookies on revoke
+- Geolocation gate, banner-interaction audit log, `exportConsentLog` for Art. 18 access requests
 - Zero runtime dependencies in core, dual ESM/CJS, full TypeScript
 
 ## Packages

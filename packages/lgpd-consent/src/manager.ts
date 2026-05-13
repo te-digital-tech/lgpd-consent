@@ -1,9 +1,21 @@
+import { type CookieCatalog, DEFAULT_COOKIE_CATALOG, clearCookiesByCategory } from './cookies.js';
 import { en } from './i18n/en.js';
 import { applyClarity } from './integrations/clarity.js';
+import { applyGa4 } from './integrations/ga4.js';
 import { applyGcm } from './integrations/gcm.js';
 import { applyGtm } from './integrations/gtm.js';
+import { applyHotjar } from './integrations/hotjar.js';
+import { applyHubSpot } from './integrations/hubspot.js';
+import { applyLinkedIn } from './integrations/linkedin.js';
 import { applyMeta } from './integrations/meta.js';
+import { applyMixpanel } from './integrations/mixpanel.js';
+import { applyPlausible } from './integrations/plausible.js';
+import { applyRdStation } from './integrations/rdstation.js';
+import { applySegment } from './integrations/segment.js';
+import { applyTiktok } from './integrations/tiktok.js';
 import { emitLog } from './log.js';
+import { STORED_PAYLOAD_VERSION, type StoredPayload } from './payload.js';
+import { type SigningStrategy, createHmacSigner } from './signing.js';
 import { buildState, createStorage } from './storage.js';
 import type {
   ConsentCategory,
@@ -12,8 +24,6 @@ import type {
   ConsentPreferences,
   ConsentState,
 } from './types.js';
-
-const STORED_PAYLOAD_VERSION = 1 as const;
 
 /**
  * Create a framework-agnostic consent manager.
@@ -25,7 +35,7 @@ const STORED_PAYLOAD_VERSION = 1 as const;
  *   log: async (event) => fetch('/api/consent-log', { method: 'POST', body: JSON.stringify(event) }),
  * });
  *
- * consent.accept('all');
+ * consent.accept();
  * consent.on('change', (state) => console.log(state));
  */
 export function createConsentManager(config: ConsentConfig): ConsentManager {
@@ -42,8 +52,37 @@ export function createConsentManager(config: ConsentConfig): ConsentManager {
 
   const strings = config.strings ?? en;
   const listeners = new Set<(state: ConsentState) => void>();
+  const signer: SigningStrategy | null = config.signingSecret
+    ? createHmacSigner(config.signingSecret)
+    : null;
 
-  let state = buildState(storage.read(), config.policyVersion, categories);
+  const catalog: CookieCatalog = resolveCatalog(config.cookieCleanup);
+  const cleanupEnabled = config.cookieCleanup !== false;
+
+  let state: ConsentState;
+  let initialPayload = storage.read();
+
+  if (initialPayload && signer) {
+    const { signature, ...rest } = initialPayload;
+    // Signature check is async — if missing or async-unverifiable, fall back to pending
+    // and start a background verification. Synchronous fast path: missing signature
+    // is treated as untrusted.
+    if (!signature) {
+      storage.clear();
+      initialPayload = null;
+    } else {
+      // optimistic accept; re-verify in background and clear if invalid
+      void signer.verify(rest, signature).then((ok) => {
+        if (!ok) {
+          storage.clear();
+          state = buildState(null, config.policyVersion, categories);
+          notify();
+        }
+      });
+    }
+  }
+
+  state = buildState(initialPayload, config.policyVersion, categories);
   applyIntegrations(state.preferences);
 
   function applyIntegrations(prefs: ConsentPreferences) {
@@ -52,16 +91,36 @@ export function createConsentManager(config: ConsentConfig): ConsentManager {
     applyClarity(prefs, config.integrations.clarity);
     applyMeta(prefs, config.integrations.meta);
     applyGtm(prefs, config.integrations.gtm);
+    applyGa4(prefs, config.integrations.ga4);
+    applyPlausible(prefs, config.integrations.plausible);
+    applyHotjar(prefs, config.integrations.hotjar);
+    applySegment(prefs, config.integrations.segment);
+    applyMixpanel(prefs, config.integrations.mixpanel);
+    applyTiktok(prefs, config.integrations.tiktok);
+    applyLinkedIn(prefs, config.integrations.linkedin);
+    applyRdStation(prefs, config.integrations.rdstation);
+    applyHubSpot(prefs, config.integrations.hubspot);
   }
 
   function persist(prefs: ConsentPreferences, type: 'accepted' | 'rejected' | 'updated') {
     const acceptedAt = new Date().toISOString();
-    storage.write({
+    const previous = state.preferences;
+    const base: Omit<StoredPayload, 'signature'> = {
       preferences: prefs,
       acceptedAt,
       policyVersion: config.policyVersion,
       version: STORED_PAYLOAD_VERSION,
-    });
+    };
+
+    // Persist sync first using whatever signature we have (none yet), then upgrade
+    // with the real signature in a microtask. This avoids racing the integrations
+    // and listeners while still delivering tamper-evidence on the cookie.
+    storage.write(base);
+    if (signer) {
+      void signer.sign(base).then((signature) => {
+        storage.write({ ...base, signature });
+      });
+    }
 
     state = {
       status: 'granted',
@@ -70,9 +129,21 @@ export function createConsentManager(config: ConsentConfig): ConsentManager {
       policyVersion: config.policyVersion,
     };
 
+    if (cleanupEnabled) cleanupDenied(previous, prefs);
     applyIntegrations(prefs);
     emitLog(type, prefs, { policyVersion: config.policyVersion, log: config.log });
     notify();
+  }
+
+  function cleanupDenied(prev: ConsentPreferences, next: ConsentPreferences) {
+    const newlyDenied: ConsentCategory[] = [];
+    for (const cat of categories) {
+      if (cat === 'essential') continue;
+      const wasOn = prev[cat] === true;
+      const isOff = next[cat] !== true;
+      if (wasOn && isOff) newlyDenied.push(cat);
+    }
+    if (newlyDenied.length) clearCookiesByCategory(newlyDenied, catalog);
   }
 
   function notify() {
@@ -111,6 +182,7 @@ export function createConsentManager(config: ConsentConfig): ConsentManager {
       persist(merged, 'updated');
     },
     revoke() {
+      const previous = state.preferences;
       storage.clear();
       const prefs = buildPrefs(() => false);
       state = {
@@ -119,6 +191,7 @@ export function createConsentManager(config: ConsentConfig): ConsentManager {
         acceptedAt: null,
         policyVersion: null,
       };
+      if (cleanupEnabled) cleanupDenied(previous, prefs);
       emitLog('revoked', prefs, { policyVersion: config.policyVersion, log: config.log });
       applyIntegrations(prefs);
       notify();
@@ -134,4 +207,22 @@ export function createConsentManager(config: ConsentConfig): ConsentManager {
     },
     strings,
   };
+}
+
+function resolveCatalog(config: ConsentConfig['cookieCleanup']): CookieCatalog {
+  if (config === false) return { essential: [], analytics: [], marketing: [] };
+  if (config === true || config === undefined) return DEFAULT_COOKIE_CATALOG;
+
+  const useDefaults = config.useDefaults !== false;
+  const base = useDefaults
+    ? DEFAULT_COOKIE_CATALOG
+    : { essential: [], analytics: [], marketing: [] };
+  const merged: CookieCatalog = { ...base };
+  if (config.catalog) {
+    for (const [cat, patterns] of Object.entries(config.catalog)) {
+      if (!patterns) continue;
+      merged[cat] = [...(merged[cat] ?? []), ...patterns];
+    }
+  }
+  return merged;
 }

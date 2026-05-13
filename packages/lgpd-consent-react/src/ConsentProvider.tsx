@@ -2,7 +2,7 @@
 
 import { createConsentManager } from '@te-digital/lgpd-consent';
 import type { ConsentConfig, ConsentManager } from '@te-digital/lgpd-consent';
-import { type ReactNode, useMemo } from 'react';
+import { type ReactNode, useMemo, useState } from 'react';
 import { ConsentContext } from './ConsentContext.js';
 
 export type ConsentProviderProps = {
@@ -13,6 +13,11 @@ export type ConsentProviderProps = {
 };
 
 export function ConsentProvider({ config, manager, children }: ConsentProviderProps) {
-  const value = useMemo(() => manager ?? createConsentManager(config), [manager, config]);
+  const resolvedManager = useMemo(() => manager ?? createConsentManager(config), [manager, config]);
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
+  const value = useMemo(
+    () => ({ manager: resolvedManager, preferencesOpen, setPreferencesOpen }),
+    [resolvedManager, preferencesOpen],
+  );
   return <ConsentContext.Provider value={value}>{children}</ConsentContext.Provider>;
 }

@@ -7,6 +7,10 @@ export type ConsentScriptProps = {
   defaultAnalytics?: boolean;
   /** Allow marketing by default before user choice. Default: false (LGPD-safe). */
   defaultMarketing?: boolean;
+  /** CSP nonce to attach to the inline `<script>`. Required when CSP `script-src` uses nonces. */
+  nonce?: string;
+  /** Override the script id (useful when rendered multiple times in dev). */
+  id?: string;
 };
 
 /**
@@ -16,17 +20,24 @@ export type ConsentScriptProps = {
  * Drop in `<head>` of your root layout. Required by GCM v2 for compliance.
  *
  * @example
- * <html>
- *   <head>
- *     <ConsentScript region="BR" />
- *   </head>
- *   <body>{children}</body>
- * </html>
+ * import { headers } from 'next/headers';
+ *
+ * export default async function Layout({ children }) {
+ *   const nonce = (await headers()).get('x-nonce') ?? undefined;
+ *   return (
+ *     <html>
+ *       <head><ConsentScript region="BR" nonce={nonce} /></head>
+ *       <body>{children}</body>
+ *     </html>
+ *   );
+ * }
  */
 export function ConsentScript({
   region,
   defaultAnalytics = false,
   defaultMarketing = false,
+  nonce,
+  id = 'lgpd-consent-gcm-default',
 }: ConsentScriptProps) {
   const analytics = defaultAnalytics ? 'granted' : 'denied';
   const marketing = defaultMarketing ? 'granted' : 'denied';
@@ -48,7 +59,7 @@ gtag('consent', 'default', {
 });`.trim();
 
   return (
-    <Script id="lgpd-consent-gcm-default" strategy="beforeInteractive">
+    <Script id={id} strategy="beforeInteractive" nonce={nonce}>
       {code}
     </Script>
   );

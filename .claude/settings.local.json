@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm --filter @te-digital/lgpd-consent build)",
+      "Bash(pnpm --filter @te-digital/lgpd-consent-react build)",
+      "Bash(pnpm --filter @te-digital/lgpd-consent-next build)",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm --filter @te-digital/lgpd-consent-react add -D @testing-library/react@^16.1.0 happy-dom@^15.11.7)",
+      "Bash(pnpm --filter @te-digital/lgpd-consent test)",
+      "Bash(pnpm --filter @te-digital/lgpd-consent-react test)",
+      "Bash(pnpm --filter @te-digital/lgpd-consent-next test)",
+      "Bash(pnpm lint *)",
+      "Bash(grep -E \"^\\(packages/|\\\\\\\\./packages|\\\\s*×|\\\\s*lint/|\\\\s*style/|\\\\s*suspicious/|\\\\s*complexity/|\\\\s*correctness/|src/|tests/|./src|./tests|✖|×|Error|error\\)\")",
+      "Bash(pnpm lint:fix)",
+      "Bash(pnpm build *)"
+    ]
+  }
+}

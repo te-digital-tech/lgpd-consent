@@ -92,6 +92,24 @@ export type IntegrationsConfig = {
   meta?: { pixelId: string };
   /** Google Tag Manager. Pushes consent events to `dataLayer`. */
   gtm?: boolean;
+  /** Google Analytics 4 (gtag.js direct, no GTM). */
+  ga4?: { measurementId: string };
+  /** Plausible. Loads tracker when analytics granted. */
+  plausible?: { domain: string; src?: string };
+  /** Hotjar. */
+  hotjar?: { siteId: number; version?: number };
+  /** Segment analytics.js. */
+  segment?: { writeKey: string };
+  /** Mixpanel. */
+  mixpanel?: { token: string };
+  /** TikTok Pixel. */
+  tiktok?: { pixelId: string };
+  /** LinkedIn Insight Tag. */
+  linkedin?: { partnerId: string };
+  /** RD Station Marketing. */
+  rdstation?: { token: string };
+  /** HubSpot tracking code. */
+  hubspot?: { portalId: string };
 };
 
 /** Configuration accepted by {@link createConsentManager}. */
@@ -117,6 +135,21 @@ export type ConsentConfig = {
   log?: (event: ConsentEvent) => void | Promise<void>;
   /** Built-in tracker integrations. */
   integrations?: IntegrationsConfig;
+  /**
+   * Optional HMAC-SHA256 secret used to sign the stored payload. When set, an
+   * unsigned or wrongly-signed payload on read is treated as missing.
+   * Bundled into the client — see signing.ts for the trade-off notes.
+   */
+  signingSecret?: string;
+  /**
+   * Cookie cleanup on revoke/deny. Provide your own catalog to extend the
+   * built-in mapping. Pass `false` to disable cleanup entirely.
+   */
+  cookieCleanup?:
+    | boolean
+    | { catalog?: Partial<Record<ConsentCategory, string[]>>; useDefaults?: boolean };
+  /** Sink for banner-interaction audit events. Distinct from the consent log hook. */
+  auditLog?: (event: import('./audit.js').BannerAuditEvent) => void | Promise<void>;
 };
 
 /** The public manager API returned by {@link createConsentManager}. */

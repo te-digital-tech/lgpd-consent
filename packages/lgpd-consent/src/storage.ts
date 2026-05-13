@@ -1,19 +1,21 @@
+import {
+  STORED_PAYLOAD_VERSION,
+  type StoredPayload,
+  defaultPreferences,
+  parseStoredPayload,
+  preferencesFromPayload,
+} from './payload.js';
 import type { ConsentState, StorageStrategy } from './types.js';
 
 const DEFAULT_KEY = 'lgpd-consent';
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
-type StoredPayload = {
-  preferences: Record<string, boolean>;
-  acceptedAt: string;
-  policyVersion: number;
-  version: 1;
-};
-
 export type StorageAdapter = {
   read(): StoredPayload | null;
   write(payload: StoredPayload): void;
   clear(): void;
+  /** Identifies the active backing store so consumers (e.g. SSR audits) can branch. */
+  readonly kind: 'localStorage' | 'cookie' | 'memory';
 };
 
 function hasLocalStorage(): boolean {
@@ -30,13 +32,10 @@ function hasDocument(): boolean {
 
 function localStorageAdapter(key: string): StorageAdapter {
   return {
+    kind: 'localStorage',
     read() {
       try {
-        const raw = window.localStorage.getItem(key);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw) as StoredPayload;
-        if (parsed.version !== 1) return null;
-        return parsed;
+        return parseStoredPayload(window.localStorage.getItem(key));
       } catch {
         return null;
       }
@@ -61,17 +60,11 @@ function localStorageAdapter(key: string): StorageAdapter {
 function cookieAdapter(key: string, domain?: string, maxAge = ONE_YEAR_SECONDS): StorageAdapter {
   const domainAttr = domain ? `; domain=${domain}` : '';
   return {
+    kind: 'cookie',
     read() {
       if (!hasDocument()) return null;
       const match = document.cookie.match(new RegExp(`(?:^|; )${key}=([^;]*)`));
-      if (!match?.[1]) return null;
-      try {
-        const parsed = JSON.parse(decodeURIComponent(match[1])) as StoredPayload;
-        if (parsed.version !== 1) return null;
-        return parsed;
-      } catch {
-        return null;
-      }
+      return parseStoredPayload(match?.[1]);
     },
     write(payload) {
       if (!hasDocument()) return;
@@ -85,6 +78,21 @@ function cookieAdapter(key: string, domain?: string, maxAge = ONE_YEAR_SECONDS):
   };
 }
 
+/** In-memory adapter — used as a last resort (e.g. SSR with no document). */
+function memoryAdapter(): StorageAdapter {
+  let store: StoredPayload | null = null;
+  return {
+    kind: 'memory',
+    read: () => store,
+    write: (p) => {
+      store = p;
+    },
+    clear: () => {
+      store = null;
+    },
+  };
+}
+
 /**
  * Compose a storage adapter from the configured strategy. `auto` prefers localStorage
  * for ergonomics; cookies are needed when the server must read consent (SSR).
@@ -94,9 +102,13 @@ export function createStorage(
   options: { key?: string; cookieDomain?: string; cookieMaxAge?: number } = {},
 ): StorageAdapter {
   const key = options.key ?? DEFAULT_KEY;
-  const useLs = strategy === 'localStorage' || (strategy === 'auto' && hasLocalStorage());
-  if (useLs) return localStorageAdapter(key);
-  return cookieAdapter(key, options.cookieDomain, options.cookieMaxAge);
+  if (strategy === 'cookie') return cookieAdapter(key, options.cookieDomain, options.cookieMaxAge);
+  if (strategy === 'localStorage') {
+    return hasLocalStorage() ? localStorageAdapter(key) : memoryAdapter();
+  }
+  if (hasLocalStorage()) return localStorageAdapter(key);
+  if (hasDocument()) return cookieAdapter(key, options.cookieDomain, options.cookieMaxAge);
+  return memoryAdapter();
 }
 
 export function buildState(
@@ -107,7 +119,7 @@ export function buildState(
   if (!payload) {
     return {
       status: 'pending',
-      preferences: buildDefaultPrefs(categories),
+      preferences: defaultPreferences(categories),
       acceptedAt: null,
       policyVersion: null,
     };
@@ -117,7 +129,7 @@ export function buildState(
   if (isStale) {
     return {
       status: 'expired',
-      preferences: buildDefaultPrefs(categories),
+      preferences: defaultPreferences(categories),
       acceptedAt: payload.acceptedAt,
       policyVersion: payload.policyVersion,
     };
@@ -125,28 +137,11 @@ export function buildState(
 
   return {
     status: 'granted',
-    preferences: mergeWithDefaults(payload.preferences, categories),
+    preferences: preferencesFromPayload(payload, categories),
     acceptedAt: payload.acceptedAt,
     policyVersion: payload.policyVersion,
   };
 }
 
-function buildDefaultPrefs(categories: string[]) {
-  const out = { essential: true } as Record<string, boolean> & { essential: true };
-  for (const cat of categories) {
-    if (cat === 'essential') continue;
-    out[cat] = false;
-  }
-  return out as ConsentState['preferences'];
-}
-
-function mergeWithDefaults(stored: Record<string, boolean>, categories: string[]) {
-  const base = buildDefaultPrefs(categories);
-  for (const cat of categories) {
-    if (cat === 'essential') continue;
-    if (cat in stored) base[cat] = stored[cat] === true;
-  }
-  return base;
-}
-
+export { STORED_PAYLOAD_VERSION };
 export type { StoredPayload };

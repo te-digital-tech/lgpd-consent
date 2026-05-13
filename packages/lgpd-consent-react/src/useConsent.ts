@@ -1,7 +1,7 @@
 'use client';
 
 import type { ConsentCategory, ConsentPreferences, ConsentState } from '@te-digital/lgpd-consent';
-import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
+import { useCallback, useContext, useSyncExternalStore } from 'react';
 import { ConsentContext } from './ConsentContext.js';
 
 export type UseConsentReturn = {
@@ -22,16 +22,16 @@ export type UseConsentReturn = {
  * Must be used inside `<ConsentProvider>`.
  */
 export function useConsent(): UseConsentReturn {
-  const manager = useContext(ConsentContext);
-  if (!manager) {
+  const ctx = useContext(ConsentContext);
+  if (!ctx) {
     throw new Error('[lgpd-consent-react] useConsent must be used inside <ConsentProvider>');
   }
+  const { manager, preferencesOpen, setPreferencesOpen } = ctx;
 
   const subscribe = useCallback((cb: () => void) => manager.on('change', cb), [manager]);
   const getSnapshot = useCallback(() => manager.get(), [manager]);
 
   const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
-  const [preferencesOpen, setPreferencesOpen] = useState(false);
 
   return {
     state,
@@ -40,8 +40,8 @@ export function useConsent(): UseConsentReturn {
     set: useCallback((partial) => manager.set(partial), [manager]),
     revoke: useCallback(() => manager.revoke(), [manager]),
     isAllowed: useCallback((cat) => manager.isAllowed(cat), [manager]),
-    openPreferences: useCallback(() => setPreferencesOpen(true), []),
-    closePreferences: useCallback(() => setPreferencesOpen(false), []),
+    openPreferences: useCallback(() => setPreferencesOpen(true), [setPreferencesOpen]),
+    closePreferences: useCallback(() => setPreferencesOpen(false), [setPreferencesOpen]),
     preferencesOpen,
   };
 }

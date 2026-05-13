@@ -42,6 +42,16 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./payload": {
+      "types": "./dist/payload.d.ts",
+      "import": "./dist/payload.js",
+      "require": "./dist/payload.cjs"
+    },
+    "./auto-block": {
+      "types": "./dist/auto-block.d.ts",
+      "import": "./dist/auto-block.js",
+      "require": "./dist/auto-block.cjs"
+    },
     "./i18n": {
       "types": "./dist/i18n/index.d.ts",
       "import": "./dist/i18n/index.js",
@@ -66,6 +76,51 @@
       "types": "./dist/integrations/gtm.d.ts",
       "import": "./dist/integrations/gtm.js",
       "require": "./dist/integrations/gtm.cjs"
+    },
+    "./integrations/ga4": {
+      "types": "./dist/integrations/ga4.d.ts",
+      "import": "./dist/integrations/ga4.js",
+      "require": "./dist/integrations/ga4.cjs"
+    },
+    "./integrations/plausible": {
+      "types": "./dist/integrations/plausible.d.ts",
+      "import": "./dist/integrations/plausible.js",
+      "require": "./dist/integrations/plausible.cjs"
+    },
+    "./integrations/hotjar": {
+      "types": "./dist/integrations/hotjar.d.ts",
+      "import": "./dist/integrations/hotjar.js",
+      "require": "./dist/integrations/hotjar.cjs"
+    },
+    "./integrations/segment": {
+      "types": "./dist/integrations/segment.d.ts",
+      "import": "./dist/integrations/segment.js",
+      "require": "./dist/integrations/segment.cjs"
+    },
+    "./integrations/mixpanel": {
+      "types": "./dist/integrations/mixpanel.d.ts",
+      "import": "./dist/integrations/mixpanel.js",
+      "require": "./dist/integrations/mixpanel.cjs"
+    },
+    "./integrations/tiktok": {
+      "types": "./dist/integrations/tiktok.d.ts",
+      "import": "./dist/integrations/tiktok.js",
+      "require": "./dist/integrations/tiktok.cjs"
+    },
+    "./integrations/linkedin": {
+      "types": "./dist/integrations/linkedin.d.ts",
+      "import": "./dist/integrations/linkedin.js",
+      "require": "./dist/integrations/linkedin.cjs"
+    },
+    "./integrations/rdstation": {
+      "types": "./dist/integrations/rdstation.d.ts",
+      "import": "./dist/integrations/rdstation.js",
+      "require": "./dist/integrations/rdstation.cjs"
+    },
+    "./integrations/hubspot": {
+      "types": "./dist/integrations/hubspot.d.ts",
+      "import": "./dist/integrations/hubspot.js",
+      "require": "./dist/integrations/hubspot.cjs"
     }
   },
   "files": [
@@ -94,6 +149,11 @@
     {
       "name": "core (ESM)",
       "path": "dist/index.js",
+      "limit": "8 KB"
+    },
+    {
+      "name": "auto-block (ESM)",
+      "path": "dist/auto-block.js",
       "limit": "3 KB"
     }
   ]
