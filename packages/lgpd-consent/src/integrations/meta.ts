@@ -1,9 +1,18 @@
 import type { ConsentPreferences, IntegrationsConfig } from '../types.js';
 
+type FbqFn = ((...args: unknown[]) => void) & {
+  // biome-ignore lint/suspicious/noExplicitAny: matches Meta Pixel vendor signature
+  callMethod?: (...args: any[]) => void;
+  queue: unknown[][];
+  push: FbqFn;
+  loaded: boolean;
+  version: string;
+};
+
 declare global {
   interface Window {
-    fbq?: ((...args: unknown[]) => void) & { queue?: unknown[][]; loaded?: boolean };
-    _fbq?: unknown;
+    fbq?: FbqFn;
+    _fbq?: FbqFn;
   }
 }
 
@@ -31,24 +40,25 @@ export function applyMeta(prefs: ConsentPreferences, config: IntegrationsConfig[
 
 function loadPixel(pixelId: string) {
   initialized = true;
-  // biome-ignore lint/suspicious/noExplicitAny: vendor snippet uses dynamic globals.
-  (function (f: any, b: Document, e: string, v: string, n?: any, t?: any, s?: any) {
-    if (f.fbq) return;
-    n = f.fbq = function (...args: unknown[]) {
-      // biome-ignore lint/suspicious/noExplicitAny: vendor signature.
-      n.callMethod ? n.callMethod.apply(n, args) : n.queue.push(args as any);
-    };
-    if (!f._fbq) f._fbq = n;
-    n.push = n;
-    n.loaded = !0;
-    n.version = '2.0';
-    n.queue = [];
-    t = b.createElement(e);
-    t.async = !0;
-    t.src = v;
-    s = b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t, s);
-  })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+  if (window.fbq) return;
+
+  const fbq = ((...args: unknown[]) => {
+    if (fbq.callMethod) fbq.callMethod.apply(fbq, args);
+    else fbq.queue.push(args);
+  }) as FbqFn;
+  fbq.queue = [];
+  fbq.push = fbq;
+  fbq.loaded = true;
+  fbq.version = '2.0';
+
+  window.fbq = fbq;
+  if (!window._fbq) window._fbq = fbq;
+
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+  const firstScript = document.getElementsByTagName('script')[0];
+  firstScript?.parentNode?.insertBefore(script, firstScript);
 
   window.fbq?.('init', pixelId);
   window.fbq?.('consent', 'revoke');

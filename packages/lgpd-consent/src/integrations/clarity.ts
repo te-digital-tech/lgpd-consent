@@ -1,8 +1,10 @@
 import type { ConsentPreferences, IntegrationsConfig } from '../types.js';
 
+type ClarityFn = ((...args: unknown[]) => void) & { q?: unknown[][] };
+
 declare global {
   interface Window {
-    clarity?: ((...args: unknown[]) => void) & { q?: unknown[][] };
+    clarity?: ClarityFn;
   }
 }
 
@@ -34,17 +36,19 @@ export function applyClarity(
 
 function loadClarityScript(projectId: string) {
   loaded = true;
-  // biome-ignore lint/suspicious/noExplicitAny: vendor snippet uses dynamic globals.
-  (function (c: any, l: any, a: string, r: string, i: string) {
-    c[a] =
-      c[a] ||
-      function (...args: unknown[]) {
-        (c[a].q = c[a].q || []).push(args);
-      };
-    const t = l.createElement(r);
-    t.async = 1;
-    t.src = `https://www.clarity.ms/tag/${i}`;
-    const y = l.getElementsByTagName(r)[0];
-    y.parentNode.insertBefore(t, y);
-  })(window, document, 'clarity', 'script', projectId);
+
+  if (!window.clarity) {
+    const clarity: ClarityFn = ((...args: unknown[]) => {
+      clarity.q = clarity.q || [];
+      clarity.q.push(args);
+    }) as ClarityFn;
+    clarity.q = [];
+    window.clarity = clarity;
+  }
+
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.clarity.ms/tag/${projectId}`;
+  const firstScript = document.getElementsByTagName('script')[0];
+  firstScript?.parentNode?.insertBefore(script, firstScript);
 }

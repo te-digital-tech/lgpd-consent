@@ -93,10 +93,16 @@ export function createConsentManager(config: ConsentConfig): ConsentManager {
       return state;
     },
     accept() {
-      persist(buildPrefs(() => true), 'accepted');
+      persist(
+        buildPrefs(() => true),
+        'accepted',
+      );
     },
     reject() {
-      persist(buildPrefs(() => false), 'rejected');
+      persist(
+        buildPrefs(() => false),
+        'rejected',
+      );
     },
     set(partial) {
       const merged = buildPrefs((cat) =>

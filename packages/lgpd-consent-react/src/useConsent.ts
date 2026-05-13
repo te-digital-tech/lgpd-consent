@@ -1,6 +1,10 @@
 'use client';
 
-import type { ConsentCategory, ConsentPreferences, ConsentState } from '@te-digital-tech/lgpd-consent';
+import type {
+  ConsentCategory,
+  ConsentPreferences,
+  ConsentState,
+} from '@te-digital-tech/lgpd-consent';
 import { useCallback, useContext, useState, useSyncExternalStore } from 'react';
 import { ConsentContext } from './ConsentContext.js';
 
@@ -27,10 +31,7 @@ export function useConsent(): UseConsentReturn {
     throw new Error('[lgpd-consent-react] useConsent must be used inside <ConsentProvider>');
   }
 
-  const subscribe = useCallback(
-    (cb: () => void) => manager.on('change', cb),
-    [manager],
-  );
+  const subscribe = useCallback((cb: () => void) => manager.on('change', cb), [manager]);
   const getSnapshot = useCallback(() => manager.get(), [manager]);
 
   const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
