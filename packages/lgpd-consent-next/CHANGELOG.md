@@ -1,5 +1,22 @@
 # @te-digital/lgpd-consent-next
 
+## 0.1.1
+
+### Patch Changes
+
+- 28fe6b3: Drop `provenance: true` from each package's `publishConfig`. Provenance is
+  already enabled in CI via `NPM_CONFIG_PROVENANCE: "true"` in the release
+  workflow env block, which is the only place we publish from going forward.
+  Removing the duplicate setting from `package.json` keeps the release-time
+  behaviour identical and stops blocking ad-hoc `npm publish` runs from
+  machines without an OIDC provider (which is where provenance fails with
+  `Automatic provenance generation not supported for provider: null`).
+
+  No runtime change. Pure release-tooling cleanup.
+
+- Updated dependencies [28fe6b3]
+  - @te-digital/lgpd-consent@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
