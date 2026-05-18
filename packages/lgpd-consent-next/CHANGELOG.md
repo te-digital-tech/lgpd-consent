@@ -1,5 +1,13 @@
 # @te-digital/lgpd-consent-next
 
+## 0.2.2
+
+### Patch Changes
+
+- acc2bbf: Realinha as versões dos três pacotes após o patch isolado do `lgpd-consent-react` (preservação do `'use client'`). Sem mudança funcional — garante que os pacotes linkados voltem a versionar em lockstep.
+- Updated dependencies [acc2bbf]
+  - @te-digital/lgpd-consent@0.2.2
+
 ## 0.2.0
 
 ### Minor Changes
