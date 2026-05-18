@@ -94,6 +94,16 @@ Each integration (`gcm`, `clarity`, `meta`, `gtm`, `ga4`, `plausible`, `hotjar`,
 
 Subpath export `@te-digital/lgpd-consent/auto-block`. Call `autoBlockScripts({ manager })` once on mount; it scans existing `<script type="text/plain" data-consent="...">` tags, swaps them for executable clones when their category is granted, and watches the DOM with a `MutationObserver` for SPA/hydration cases. Revoking does not unload running code — it removes the executed clones and fires a `lgpd-consent:reload-suggested` window event so consumers can surface a reload to the user.
 
+### Other public utilities re-exported from core `index.ts`
+
+These are first-class API, not internals — keep their JSDoc and signatures stable:
+
+- `resolveGeoGate(country, policy)` (`geo.ts`) — decides whether to show the banner for a given ISO country. Deliberately does **not** call any geolocation API; the caller passes the country from a CDN header, `request.geo`, or middleware. Default `onUnknown: 'show'` is the LGPD-safe choice.
+- `exportConsentLog(manager)` / `exportConsentLogJson(manager)` (`export.ts`) — produces a portable `ConsentLogRecord` for Art. 18 data-subject access requests. `exportedAt` is the export timestamp, not the decision time.
+- `DEFAULT_COOKIE_CATALOG`, `clearCookiesByCategory`, `scanCookies` (`cookies.ts`) — the catalog that powers `cookieCleanup`, plus standalone helpers for surfacing/clearing third-party cookies. Pattern values ending in `*` are matched as a prefix.
+- `createAuditRecorder` + `BannerAuditEvent` (`audit.ts`) — a separate channel from `ConsentEvent`s for *banner UX telemetry* (impressions, time-to-decision, which button was clicked). Routed through the same `log` hook with a distinct event `type`.
+- `isPolicyStale(state, policyVersion)` (`version.ts`) — the helper the manager uses to derive `status: 'expired'`. Exposed so consumers can run the same comparison outside the manager.
+
 ### Log hook semantics
 
 `config.log` is **fire-and-forget by design** (`packages/lgpd-consent/src/log.ts`) — sync errors and promise rejections are swallowed so logging failures never block consent application. Don't change this without an architectural reason; callers are expected to handle batching/retries/durability server-side.
@@ -124,7 +134,7 @@ These are separate `exports` in `package.json` and separate `entry` keys in `tsu
 - **Lint/format:** Biome only (no ESLint/Prettier). Strict rules: `useImportType`, `useExportType`, `noExplicitAny: error`. Formatter is disabled on `package.json` files via override (manifest tooling owns that formatting).
 - **Tests:** Vitest with `happy-dom` environment (needed because storage/integrations touch `window`/`document`/`localStorage`). Tests live alongside core only — React/Next packages run `vitest --passWithNoTests`.
 - **Releases:** Changesets via `.github/workflows/release.yml`. Pushing to `main` either opens a release PR or, when that PR is merged, publishes to npm with `NPM_CONFIG_PROVENANCE=true`. Per-package `publishConfig.access` is `public`.
-- **Size budget:** core ESM bundle is capped at 3 KB via `size-limit` config in `packages/lgpd-consent/package.json`. Adding dependencies to core breaks the "zero runtime deps" guarantee — don't.
+- **Size budget:** `size-limit` config in `packages/lgpd-consent/package.json` caps core ESM at 8 KB and the `auto-block` subpath at 3 KB. Adding dependencies to core breaks the "zero runtime deps" guarantee — don't.
 
 ## Conventions (from CONTRIBUTING.md and biome.json)
 
